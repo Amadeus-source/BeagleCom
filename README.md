@@ -1,5 +1,5 @@
 # BeagleCom
-BeagleCom is a project with the aim to equip the BeagleBone with easy-to-use and accessible communication tools. A file sharing system and a IRC client capable.
+BeagleCom is a project with the aim to equip the BeagleBone with easy-to-use and accessible communication tools. A file sharing system and a IRC client capable to connect to any public channel.
 
 ```
 python3 sendfile.py -i <localhost> -p <port> -f <file path>
