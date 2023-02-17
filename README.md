@@ -3,7 +3,10 @@ BeagleCom is based around the concept of a centralized tracker and an associated
 
 ```
 python3 send_files.py -i <localhost> -p <port> -f <file path>
-
+```
+To send and receive files and folders globally, the receiver run NGROK
+```
+./ngrok tcp <receiver port>
 python3 receiver.py
 ```
 To use launch the IRC client
