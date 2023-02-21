@@ -1,6 +1,8 @@
+#!/usr/bin/env python3
 import socket
 import threading
 import sys
+import time
 
 
 def usage():
@@ -16,15 +18,20 @@ def channel(channel):
 
 # helper function used as thread target
 def print_response():
-    resp = client.get_response()
+    resp = client.get_response().decode()
+    if "PING" in resp:
+            client.send_cmd("PONG", ":" + resp.split(":")[1])
     if resp:
         msg = resp.strip().split(":")
-        print("< {}> {}".format(msg[1].split("!")[0], msg[2].strip()))
+        decoded = "<{}> {}".format(msg[1].split("!")[0], msg[2].strip())
+        print(decoded)
+        with open("src/logs.txt", "w") as outfile:
+                outfile.write(decoded)
 
 
 class IRCSimpleClient:
 
-    def __init__(self, username, channel, server="irc.freenode.net", port=6667):
+    def __init__(self, username, channel, server="chat.freenode.net", port=6667):
         self.username = username
         self.server = server
         self.port = port
@@ -35,11 +42,11 @@ class IRCSimpleClient:
         self.conn.connect((self.server, self.port))
 
     def get_response(self):
-        return self.conn.recv(512).decode("utf-8")
+        return self.conn.recv(4096)
 
     def send_cmd(self, cmd, message):
-        command = "{} {}\r\n".format(cmd, message).encode("utf-8")
-        self.conn.send(command)
+        command = "{} {}\r\n".format(cmd, message)
+        self.conn.send(command.encode())
 
     def send_message_to_channel(self, message):
         command = "PRIVMSG {}".format(self.channel)
@@ -66,9 +73,10 @@ if __name__ == "__main__":
     client.connect()
 
     while(joined == False):
-        resp = client.get_response()
+        resp = client.get_response().decode()
         print(resp.strip())
-        if "No Ident response" in resp:
+        time.sleep(1)
+        if "Looking up" in resp:
             client.send_cmd("NICK", username)
             client.send_cmd(
                 "USER", "{} * * :{}".format(username, username))
@@ -92,14 +100,27 @@ if __name__ == "__main__":
         if "366" in resp:
             joined = True
 
-    while(cmd != "/quit"):
-        cmd = input("< {}> ".format(username)).strip()
-        if cmd == "/quit":
-            client.send_cmd("QUIT", "Good bye!")
-        client.send_message_to_channel(cmd)
+        else:
+            client.send_cmd("NICK", username)
+            client.send_cmd(
+                "USER", "{} * * :{}".format(username, username))
 
-        # socket conn.receive blocks the program until a response is received
-        # to prevent blocking program execution, receive should be threaded
-        response_thread = threading.Thread(target=print_response)
-        response_thread.daemon = True
-        response_thread.start()
+
+    while(cmd != "/quit"):
+        try:
+            cmd = input("<{}> ".format(username)).strip()
+            with open("src/logs.txt", "w") as outfile:
+                outfile.write(cmd)
+            if cmd == "/quit":
+                client.send_cmd("QUIT", "Good bye!")
+            client.send_message_to_channel(cmd)
+
+            # socket conn.receive blocks the program until a response is received
+            # to prevent blocking program execution, receive should be threaded
+            response_thread = threading.Thread(target=print_response)
+            response_thread.daemon = True
+            response_thread.start()
+        
+        except KeyboardInterrupt:
+            print("Closing and Exiting...")
+            client.send_cmd("QUIT", "Good bye!")

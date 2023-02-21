@@ -13,4 +13,4 @@ To use launch the IRC client
 ```
 python3 irc_client.py <nusername> <channeltojoin>  
 ```
-
+Beagle login backgroung : Photo by Oliver on Unsplash

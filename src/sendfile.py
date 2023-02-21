@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 # from alive_progress import alive_bar
 from optparse import OptionParser 
 
@@ -34,7 +35,7 @@ if os.path.isdir(file_name):
     print('err')
 # initializing the buffer size
 
-buff = 1024
+buff = 4096
 
 # connecting to the server machine
 

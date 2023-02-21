@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>BeagleCom Login</title>
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+
+
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous"><link rel="stylesheet" href="../static/style.css">
+
+</head>
+<body>
+<!-- partial:index.partial.html -->
+<div class="box-form">
+	<div class="left">
+		<div class="overlay">
+		<h1>BeagleCom</h1>
+		<p>BeagleCom is a project with the aim to equip the BeagleBone with easy-to-use and accessible communication tools. 
+			A file sharing system and a IRC client capable to connect to any public channe</p>
+		</div>
+	</div>
+	
+		<div class="right">
+		<h5>Login</h5>
+		<div class="inputs">
+            <form action="" method="post">
+			<input type="text" placeholder="Username" name="user" value="{{request.form.user }}">
+			<br>
+			<input type="password" placeholder="Password" name="passwd" value="{{request.form.passwd}}">
+			<input class=button type="submit" value="Login">
+            </form>
+		</div>
+			
+			<br><br>
+			
+			
+			<br>
+			
+	</div>
+	
+</div>
+<!-- partial -->
+  
+</body>
+</html>
