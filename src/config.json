@@ -1,0 +1,8 @@
+{
+    "server":"chat.freenode.net",
+    "port":6667,
+    "channel": "BeagleCOm",
+    "botnick":"Hurbert",
+    "botpassw":"Rudimentary",
+    "log_to_file":"true"
+}

@@ -1,12 +1,18 @@
+#!/usr/bin/env python3
 from threading import Thread
 import socket,os
-os.chdir('received_files')
+import Adafruit_BBIO.GPIO as GPIO
+import time
+
+LED = "P9_11"
+
+os.chdir("../../recfil")
 
 a=os.getcwd()
-print(a)
+#print(a)
 
 clients = []
-buff = 1024
+buff = 4096
 
 # implementing one server thread per client class
 
@@ -26,6 +32,7 @@ class Server(Thread):
     def _close(self):
         clients.remove(self.socket)
         self.socket.close()
+        self.toggle()
         print(self.name + ' disconnected')
         
         
@@ -55,7 +62,7 @@ class Server(Thread):
     def run(self):
         while True:
             
-            # recieving a file name and sending it back
+            # receive a file name and sending it back
             # as an acknowledgement
             
             file_name = self.socket.recv(buff).decode()
@@ -82,7 +89,7 @@ class Server(Thread):
             
             self.file = open(file_name, "wb")
             
-            # recieving the file content
+            # receive the file content
             # until its fully recieved
             
             msg = self.socket.recv(buff)
@@ -94,12 +101,20 @@ class Server(Thread):
             # and finishing the thread
                 
             self.file.close()
-            os.system('python dl.py')
+            #os.system('python dl.py')
             self._close()
             
 
             return
             
+    def toggle(self):
+        GPIO.setup(LED, GPIO.OUT)
+        for i in range(2):
+            GPIO.output(LED, 1)
+            time.sleep(1)
+            GPIO.output(LED, 0)
+            time.sleep(1)
+
 def main():
     
     # initializing variable for user counting
@@ -108,8 +123,8 @@ def main():
     
     # setting up the port number and buffer size
     
-    server_port = int(input('enter port : '))
-    buff = 1024
+    server_port = int(input('Enter port : '))
+    buff = 4096
     
     # initalizing the socket on IPv4 TCP protocol
 
@@ -118,11 +133,11 @@ def main():
     # binding server to the socket and listening to all
     # incomming traffic on a specified port
 
-    s.bind((input('enter host (ex:localhost): ').strip('()'), server_port))
+    s.bind((input('Enter host (ex:localhost): ').strip('()'), server_port))
     s.listen()
     print("Listening on port {}".format(server_port))
     
-    # continuously recieving file from different users
+    # continuously receive file from different users
     
     while True:
         
