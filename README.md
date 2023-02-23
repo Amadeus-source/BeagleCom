@@ -15,4 +15,6 @@ python3 irc_client.py <username> <channeltojoin>
 ```
 
 More information are available on the Wiki: <https://elinux.org/ECE_434_BeagleCom>
+Video demo: <https://youtu.be/C6mogTZ1gCY>
+
 Beagle login backgroung : Photo by Oliver on Unsplash
