@@ -4,6 +4,8 @@ import socket,os
 import Adafruit_BBIO.GPIO as GPIO
 import time
 
+LED = "P9_11"
+
 os.chdir("../../recfil")
 
 a=os.getcwd()
@@ -106,11 +108,11 @@ class Server(Thread):
             return
             
     def toggle(self):
-        GPIO.setup(P9_11, GPIO.OUT)
+        GPIO.setup(LED, GPIO.OUT)
         for i in range(2):
-            GPIO.output(P9_11, 1)
+            GPIO.output(LED, 1)
             time.sleep(1)
-            GPIO.output(P9_11, 0)
+            GPIO.output(LED, 0)
             time.sleep(1)
 
 def main():

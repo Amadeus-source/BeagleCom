@@ -3,7 +3,12 @@ import socket
 import threading
 import sys
 import time
+import json
+import Adafruit_BBIO.GPIO as GPIO
 
+LED = "P9_12"
+f = open('../config.json', 'r')
+data = json.load(f)
 
 def usage():
     print("IRC Client \n")
@@ -23,11 +28,19 @@ def print_response():
             client.send_cmd("PONG", ":" + resp.split(":")[1])
     if resp:
         msg = resp.strip().split(":")
-        decoded = "<{}> {}".format(msg[1].split("!")[0], msg[2].strip())
+        decoded = "<{}> {} \n".format(msg[1].split("!")[0], msg[2].strip())
         print(decoded)
-        with open("src/logs.txt", "w") as outfile:
+        with open("../src/logs.txt", "a") as outfile:
                 outfile.write(decoded)
+                toggle()
 
+#toggle LED
+def toggle():
+        GPIO.setup(LED, GPIO.OUT)
+        GPIO.output(LED, 1)
+        time.sleep(1)
+        GPIO.output(LED, 0)
+        time.sleep(1)
 
 class IRCSimpleClient:
 
@@ -108,9 +121,9 @@ if __name__ == "__main__":
 
     while(cmd != "/quit"):
         try:
-            cmd = input("<{}> ".format(username)).strip()
-            with open("src/logs.txt", "w") as outfile:
-                outfile.write(cmd)
+            cmd = input("\n<{}> ".format(username)).strip()
+            with open("../src/logs.txt", "a") as outfile:
+                outfile.write("<{}> {} \n".format(username, cmd))
             if cmd == "/quit":
                 client.send_cmd("QUIT", "Good bye!")
             client.send_message_to_channel(cmd)

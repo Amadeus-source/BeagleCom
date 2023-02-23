@@ -11,6 +11,8 @@ python3 receiver.py
 ```
 To use launch the IRC client
 ```
-python3 irc_client.py <nusername> <channeltojoin>  
+python3 irc_client.py <username> <channeltojoin>  
 ```
+
+More information are available on the Wiki: <https://elinux.org/ECE_434_BeagleCom>
 Beagle login backgroung : Photo by Oliver on Unsplash
